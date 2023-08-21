@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e -o pipefail
+
+dir="$1/$(printf day%02d $2)"
+
+mkdir "$dir"
+touch "$dir/input.txt"
+
+cat > "$dir/dune" <<-EOF
+(executable
+ (name main)
+ (libraries str)
+ (preprocess
+  (pps ppx_blob))
+ (preprocessor_deps (file input.txt)))
+EOF
+
+cat > "$dir/main.ml" <<-EOF
+let input = [%blob "input.txt"]
+
+
+EOF
